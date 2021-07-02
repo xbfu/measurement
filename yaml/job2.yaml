@@ -1,0 +1,146 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: job2
+  labels:
+    run: job2
+spec:
+  selector:
+    run: job2
+  ports:
+    - protocol: TCP
+      port: 29600
+      targetPort: 29600
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: job2
+  name: ps-job2
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: job2
+    spec:
+      containers:
+        - name: job2
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/vgg16-syn.py","--model=vgg16","--job_name=job2_syn","--rank=0","--batch_size=512","--num_workers=2","--master_addr=job2","--num_epochs=20"]
+          ports:
+            - containerPort: 29600
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-02
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: job2
+  name: worker1-job2
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: job2
+    spec:
+      containers:
+        - name: job2
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/vgg16-syn.py","--model=vgg16","--job_name=job2_syn","--rank=1","--batch_size=512","--num_workers=2","--master_addr=job2","--num_epochs=20"]
+          ports:
+            - containerPort: 29600
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-01
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: job2
+  name: worker2-job2
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: job2
+    spec:
+      containers:
+        - name: job2
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/vgg16-syn.py","--model=vgg16","--job_name=job2_syn","--rank=2","--batch_size=512","--num_workers=2","--master_addr=job2","--num_epochs=20"]
+          ports:
+            - containerPort: 29600
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-00
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: job2
+  name: tester-job2
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: job2
+    spec:
+      containers:
+        - name: job2
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/vgg16-syn.py","--model=vgg16","--job_name=job2_syn","--rank=3","--batch_size=512","--num_workers=2","--master_addr=job2","--num_epochs=20"]
+          ports:
+            - containerPort: 29600
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-05
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never

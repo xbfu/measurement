@@ -1,0 +1,205 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: info
+  labels:
+    run: info
+spec:
+  selector:
+    run: info
+  ports:
+    - protocol: TCP
+      port: 29600
+      targetPort: 29600
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: info
+  name: info0
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: info
+    spec:
+      hostNetwork: true
+      containers:
+        - name: info
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/info.py","--file_dir=/workspace/measurement/logs/info_syn_info0.log","--interval=1.0"]
+          ports:
+            - containerPort: 29600
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-00
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: info
+  name: info1
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: info
+    spec:
+      hostNetwork: true
+      containers:
+        - name: info
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/info.py","--file_dir=/workspace/measurement/logs/info_syn_info1.log","--interval=1.0"]
+          ports:
+            - containerPort: 29600
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-01
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: info
+  name: info2
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: info
+    spec:
+      hostNetwork: true
+      containers:
+        - name: info
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/info.py","--file_dir=/workspace/measurement/logs/info_syn_info2.log","--interval=1.0"]
+          ports:
+            - containerPort: 29600
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-02
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: info
+  name: info3
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: info
+    spec:
+      hostNetwork: true
+      containers:
+        - name: info
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/info.py","--file_dir=/workspace/measurement/logs/info_syn_info3.log","--interval=1.0"]
+          ports:
+            - containerPort: 29600
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-03
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: info
+  name: info4
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: info
+    spec:
+      hostNetwork: true
+      containers:
+        - name: info
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/info.py","--file_dir=/workspace/measurement/logs/info_syn_info4.log","--interval=1.0"]
+          ports:
+            - containerPort: 29600
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-04
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: info
+  name: info5
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: info
+    spec:
+      hostNetwork: true
+      containers:
+        - name: info
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/info.py","--file_dir=/workspace/measurement/logs/info_syn_info5.log","--interval=1.0"]
+          ports:
+            - containerPort: 29600
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-05
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never

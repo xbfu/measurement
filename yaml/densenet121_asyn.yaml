@@ -1,0 +1,374 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: densenet121
+  labels:
+    run: densenet121
+spec:
+  selector:
+    run: densenet121
+  ports:
+    - protocol: TCP
+      port: 29600
+      targetPort: 29600
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: densenet121
+  name: ps-densenet121
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: densenet121
+    spec:
+      containers:
+        - name: densenet121
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/densenet121-asyn.py","--model=densenet121","--job_name=densenet121_asyn","--rank=0","--batch_size=64","--num_workers=4","--master_addr=densenet121","--num_epochs=20"]
+          ports:
+            - containerPort: 29600
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-00
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: densenet121
+  name: worker1-densenet121
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: densenet121
+    spec:
+      containers:
+        - name: densenet121
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/densenet121-asyn.py","--model=densenet121","--job_name=densenet121_asyn","--rank=1","--batch_size=64","--num_workers=4","--master_addr=densenet121","--num_epochs=20"]
+          ports:
+            - containerPort: 29600
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-01
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: densenet121
+  name: worker2-densenet121
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: densenet121
+    spec:
+      containers:
+        - name: densenet121
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/densenet121-asyn.py","--model=densenet121","--job_name=densenet121_asyn","--rank=2","--batch_size=64","--num_workers=4","--master_addr=densenet121","--num_epochs=20"]
+          ports:
+            - containerPort: 29600
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-02
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: densenet121
+  name: worker3-densenet121
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: densenet121
+    spec:
+      containers:
+        - name: densenet121
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/densenet121-asyn.py","--model=densenet121","--job_name=densenet121_asyn","--rank=3","--batch_size=64","--num_workers=4","--master_addr=densenet121","--num_epochs=20"]
+          ports:
+            - containerPort: 29600
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-03
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: densenet121
+  name: worker4-densenet121
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: densenet121
+    spec:
+      containers:
+        - name: densenet121
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/densenet121-asyn.py","--model=densenet121","--job_name=densenet121_asyn","--rank=4","--batch_size=64","--num_workers=4","--master_addr=densenet121","--num_epochs=20"]
+          ports:
+            - containerPort: 29600
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-04
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: densenet121
+  name: tester-densenet121
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: densenet121
+    spec:
+      containers:
+        - name: densenet121
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/densenet121-asyn.py","--model=densenet121","--job_name=densenet121_asyn","--rank=5","--batch_size=64","--num_workers=4","--master_addr=densenet121","--num_epochs=20"]
+          ports:
+            - containerPort: 29600
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-05
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: densenet121
+  name: info0-densenet121
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: densenet121
+    spec:
+      hostNetwork: true
+      containers:
+        - name: densenet121
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/info.py","--file_dir=/workspace/measurement/logs/densenet121_asyn_info0.log","--interval=1.0"]
+          ports:
+            - containerPort: 29600
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-00
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: densenet121
+  name: info1-densenet121
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: densenet121
+    spec:
+      hostNetwork: true
+      containers:
+        - name: densenet121
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/info.py","--file_dir=/workspace/measurement/logs/densenet121_asyn_info1.log","--interval=1.0"]
+          ports:
+            - containerPort: 29600
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-01
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: densenet121
+  name: info2-densenet121
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: densenet121
+    spec:
+      hostNetwork: true
+      containers:
+        - name: densenet121
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/info.py","--file_dir=/workspace/measurement/logs/densenet121_asyn_info2.log","--interval=1.0"]
+          ports:
+            - containerPort: 29600
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-02
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: densenet121
+  name: info3-densenet121
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: densenet121
+    spec:
+      hostNetwork: true
+      containers:
+        - name: densenet121
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/info.py","--file_dir=/workspace/measurement/logs/densenet121_asyn_info3.log","--interval=1.0"]
+          ports:
+            - containerPort: 29600
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-03
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: densenet121
+  name: info4-densenet121
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: densenet121
+    spec:
+      hostNetwork: true
+      containers:
+        - name: densenet121
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/info.py","--file_dir=/workspace/measurement/logs/densenet121_asyn_info4.log","--interval=1.0"]
+          ports:
+            - containerPort: 29600
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-04
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never

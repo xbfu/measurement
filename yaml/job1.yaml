@@ -1,0 +1,146 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: job1
+  labels:
+    run: job1
+spec:
+  selector:
+    run: job1
+  ports:
+    - protocol: TCP
+      port: 29600
+      targetPort: 29600
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: job1
+  name: ps-job1
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: job1
+    spec:
+      containers:
+        - name: job1
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/resnet18-syn.py","--model=resnet18","--job_name=job1_syn","--rank=0","--batch_size=512","--num_workers=2","--master_addr=job1","--num_epochs=20"]
+          ports:
+            - containerPort: 29600
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-02
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: job1
+  name: worker1-job1
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: job1
+    spec:
+      containers:
+        - name: job1
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/resnet18-syn.py","--model=resnet18","--job_name=job1_syn","--rank=1","--batch_size=512","--num_workers=2","--master_addr=job1","--num_epochs=20"]
+          ports:
+            - containerPort: 29600
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-02
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: job1
+  name: worker2-job1
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: job1
+    spec:
+      containers:
+        - name: job1
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/resnet18-syn.py","--model=resnet18","--job_name=job1_syn","--rank=2","--batch_size=512","--num_workers=2","--master_addr=job1","--num_epochs=20"]
+          ports:
+            - containerPort: 29600
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-03
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: job1
+  name: tester-job1
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: job1
+    spec:
+      containers:
+        - name: job1
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/resnet18-syn.py","--model=resnet18","--job_name=job1_syn","--rank=3","--batch_size=512","--num_workers=2","--master_addr=job1","--num_epochs=20"]
+          ports:
+            - containerPort: 29600
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-04
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never

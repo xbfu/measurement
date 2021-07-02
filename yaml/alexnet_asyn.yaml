@@ -1,0 +1,374 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: alexnet
+  labels:
+    run: alexnet
+spec:
+  selector:
+    run: alexnet
+  ports:
+    - protocol: TCP
+      port: 29600
+      targetPort: 29600
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: alexnet
+  name: ps-alexnet
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: alexnet
+    spec:
+      containers:
+        - name: alexnet
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/alexnet-asyn.py","--model=alexnet","--job_name=alexnet_asyn","--rank=0","--batch_size=512","--num_workers=4","--master_addr=alexnet","--num_epochs=50"]
+          ports:
+            - containerPort: 29600
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-00
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: alexnet
+  name: worker1-alexnet
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: alexnet
+    spec:
+      containers:
+        - name: alexnet
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/alexnet-asyn.py","--model=alexnet","--job_name=alexnet_asyn","--rank=1","--batch_size=512","--num_workers=4","--master_addr=alexnet","--num_epochs=50"]
+          ports:
+            - containerPort: 29600
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-01
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: alexnet
+  name: worker2-alexnet
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: alexnet
+    spec:
+      containers:
+        - name: alexnet
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/alexnet-asyn.py","--model=alexnet","--job_name=alexnet_asyn","--rank=2","--batch_size=512","--num_workers=4","--master_addr=alexnet","--num_epochs=50"]
+          ports:
+            - containerPort: 29600
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-02
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: alexnet
+  name: worker3-alexnet
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: alexnet
+    spec:
+      containers:
+        - name: alexnet
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/alexnet-asyn.py","--model=alexnet","--job_name=alexnet_asyn","--rank=3","--batch_size=512","--num_workers=4","--master_addr=alexnet","--num_epochs=50"]
+          ports:
+            - containerPort: 29600
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-03
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: alexnet
+  name: worker4-alexnet
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: alexnet
+    spec:
+      containers:
+        - name: alexnet
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/alexnet-asyn.py","--model=alexnet","--job_name=alexnet_asyn","--rank=4","--batch_size=512","--num_workers=4","--master_addr=alexnet","--num_epochs=50"]
+          ports:
+            - containerPort: 29600
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-04
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: alexnet
+  name: tester-alexnet
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: alexnet
+    spec:
+      containers:
+        - name: alexnet
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/alexnet-asyn.py","--model=alexnet","--job_name=alexnet_asyn","--rank=5","--batch_size=512","--num_workers=4","--master_addr=alexnet","--num_epochs=50"]
+          ports:
+            - containerPort: 29600
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-05
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: alexnet
+  name: info0-alexnet
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: alexnet
+    spec:
+      hostNetwork: true
+      containers:
+        - name: alexnet
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/info.py","--file_dir=/workspace/measurement/logs/alexnet_asyn_info0.log","--interval=1.0"]
+          ports:
+            - containerPort: 29600
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-00
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: alexnet
+  name: info1-alexnet
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: alexnet
+    spec:
+      hostNetwork: true
+      containers:
+        - name: alexnet
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/info.py","--file_dir=/workspace/measurement/logs/alexnet_asyn_info1.log","--interval=1.0"]
+          ports:
+            - containerPort: 29600
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-01
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: alexnet
+  name: info2-alexnet
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: alexnet
+    spec:
+      hostNetwork: true
+      containers:
+        - name: alexnet
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/info.py","--file_dir=/workspace/measurement/logs/alexnet_asyn_info2.log","--interval=1.0"]
+          ports:
+            - containerPort: 29600
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-02
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: alexnet
+  name: info3-alexnet
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: alexnet
+    spec:
+      hostNetwork: true
+      containers:
+        - name: alexnet
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/info.py","--file_dir=/workspace/measurement/logs/alexnet_asyn_info3.log","--interval=1.0"]
+          ports:
+            - containerPort: 29600
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-03
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    run: alexnet
+  name: info4-alexnet
+spec:
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        run: alexnet
+    spec:
+      hostNetwork: true
+      containers:
+        - name: alexnet
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/info.py","--file_dir=/workspace/measurement/logs/alexnet_asyn_info4.log","--interval=1.0"]
+          ports:
+            - containerPort: 29600
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      nodeSelector:
+        kubernetes.io/hostname: node-04
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: Never
