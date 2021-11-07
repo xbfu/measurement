@@ -1,3 +1,0 @@
-# Logs
-
-Logs during training.

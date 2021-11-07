@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{job_name}}
+  labels:
+    run: {{job_name}}
+spec:
+  selector:
+    run: {{job_name}}
+  ports:
+  - protocol: TCP
+    port: {{port}}
+    targetPort: {{port}}
+---
