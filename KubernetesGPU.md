@@ -40,7 +40,7 @@ echo "deb http://developer.download.nvidia.com/compute/cuda/repos/$distribution/
 Update the APT repository cache and install the driver using the cuda-drivers meta-package
 ``` bash
 sudo apt-get update
-sudo apt-get -y install cuda-drivers
+sudo apt-get -y install cuda-drivers-470
 ```
 Check the GPU information
 ``` bash
