@@ -3,7 +3,7 @@
 ## Launch instances
 ***Make sure that you always launch instances in N. Virginia (us-east-1).***
 
-1. **Choose an AMI**: Ubuntu Server 18.04 LTS (HVM), SSD Volume Type
+1. **Choose an AMI**: ami-00aca32656b7e1454 in Community AMIs
 2. **Choose an Instance Type**: **t3.xlarge** as the master node and **p2.xlarge** for worker nodes
 3. **Configure Instance Details**: you may set the subnet to let your instances in the same subnet
 4. **Add Storage**: 20 GiB for the master node and 40 GiB for each worker node
