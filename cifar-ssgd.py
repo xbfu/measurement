@@ -287,7 +287,7 @@ if __name__ == "__main__":
     parser.add_argument("--test_batch_size", type=int, default=64, help="Batch size during testing.")
     parser.add_argument("--lr", type=float, default=0.05, help="Learning rate.")
     parser.add_argument("--num_epochs", type=int, default=1, help="Number of epochs.")
-    parser.add_argument("--target", type=float, default=0.8, help="Targer accuracy.")
+    parser.add_argument("--target", type=float, default=70, help="Targer accuracy.")
 
     args = parser.parse_args()
 
