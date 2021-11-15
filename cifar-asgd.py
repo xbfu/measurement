@@ -207,7 +207,7 @@ def get_accuracy(ps_rref, data_dir, test_batch_size, job_name, target_loss):
     init = t0
     while True:
         t1 = time.time()
-        if t1 - t0 > 30:
+        if t1 - t0 > 40:
             t0 = t1
             m = ps_rref.rpc_sync().get_model().to(device)
 
@@ -282,7 +282,7 @@ if __name__ == "__main__":
     parser.add_argument("--master_addr", type=str, default="localhost", help="Address of master.")
     parser.add_argument("--master_port", type=str, default="29600", help="Port that master is listening on.")
     parser.add_argument("--batch_size", type=int, default=128, help="Batch size of each worker during training.")
-    parser.add_argument("--test_batch_size", type=int, default=128, help="Batch size during testing.")
+    parser.add_argument("--test_batch_size", type=int, default=64, help="Batch size during testing.")
     parser.add_argument("--lr", type=float, default=0.05, help="Learning rate.")
     parser.add_argument("--num_epochs", type=int, default=1, help="Number of epochs.")
     parser.add_argument("--target_loss", type=float, default=0.9, help="Targer accuracy.")
