@@ -55,7 +55,7 @@ if __name__ == '__main__':
     parser.add_argument("--model_name", type=str, default="vgg13", help="The model's name.")
     parser.add_argument("--num_workers", type=int, default=4, help="Total number of workers.")
     parser.add_argument("--ss", type=str, default="asgd", help="Learning rate.")
-    parser.add_argument("--batch_size", type=int, default=256, help="Batch size of each worker during training.")
+    parser.add_argument("--batch_size", type=int, default=128, help="Batch size of each worker during training.")
     parser.add_argument("--lr", type=float, default=0.005, help="Learning rate.")
 
     args = parser.parse_args()
