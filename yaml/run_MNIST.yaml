@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: test1
+spec:
+  template:
+    metadata:
+      name: test1
+    spec:
+      containers:
+        - name: test
+          image: xbfu1994/test:v4
+          command: ["python"]
+          args: ["/workspace/measurement/test_MNIST.py","--data_dir=/workspace/measurement/data"]
+          ports:
+            - containerPort: 29600
+          volumeMounts:
+            - name: mydir
+              mountPath: /workspace/measurement
+      volumes:
+        - name: mydir
+          hostPath:
+            path: /home/ubuntu/measurement
+      restartPolicy: OnFailure
