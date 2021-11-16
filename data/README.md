@@ -1,3 +1,0 @@
-# Datasets
-
-Datasets for training.
