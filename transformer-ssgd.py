@@ -40,7 +40,7 @@ class ParameterServer(object):
         self.batch_update_size = num_workers
         self.curr_update_size = 0
         self.stop_flag = False
-        self.model = transformer.TransformerModel(ntoken=28782, ninp=200, nhead=8, nhid=200, nlayers=2, dropout=0)
+        self.model = transformer.TransformerModel(ntoken=28782, ninp=200, nhead=2, nhid=200, nlayers=2, dropout=0)
         self.lr = lr
         for p in self.model.parameters():
             p.grad = torch.zeros_like(p)
@@ -221,7 +221,7 @@ def get_accuracy(ps_rref, data_dir, test_batch_size, job_name, target_loss):
     init = t0
     while True:
         t1 = time.time()
-        if t1 - t0 > 20:
+        if t1 - t0 > 10:
             t0 = t1
             m = ps_rref.rpc_sync().get_model().to(device)
 
@@ -296,7 +296,7 @@ if __name__ == "__main__":
     parser.add_argument("--test_batch_size", type=int, default=64, help="Batch size during testing.")
     parser.add_argument("--lr", type=float, default=0.1, help="Learning rate.")
     parser.add_argument("--num_epochs", type=int, default=1, help="Number of epochs.")
-    parser.add_argument("--target_loss", type=float, default=5.5, help="Targer accuracy.")
+    parser.add_argument("--target_loss", type=float, default=6, help="Targer accuracy.")
 
     args = parser.parse_args()
 
