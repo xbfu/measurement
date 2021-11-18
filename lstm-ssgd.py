@@ -301,9 +301,9 @@ if __name__ == "__main__":
     parser.add_argument("--master_port", type=str, default="29600", help="Port that master is listening on.")
     parser.add_argument("--batch_size", type=int, default=256, help="Batch size of each worker during training.")
     parser.add_argument("--test_batch_size", type=int, default=64, help="Batch size during testing.")
-    parser.add_argument("--lr", type=float, default=0.1, help="Learning rate.")
+    parser.add_argument("--lr", type=float, default=1, help="Learning rate.")
     parser.add_argument("--num_epochs", type=int, default=1, help="Number of epochs.")
-    parser.add_argument("--target_loss", type=float, default=5.5, help="Targer accuracy.")
+    parser.add_argument("--target_loss", type=float, default=6, help="Targer accuracy.")
 
     args = parser.parse_args()
 
