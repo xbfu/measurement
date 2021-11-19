@@ -30,9 +30,10 @@ def generate_yaml(job_name, model_name, num_workers, ss, batch_size, lr, port=29
         buffer = f.read()
 
     for rank in range(1, num_workers + 1):
+        cpu = -1
         node = f'0{rank}'
         worker = {'job_name': job_name, 'model_name': model_name, 'rank': rank, 'num_workers': num_workers,
-                  'ss': ss, 'batch_size': batch_size, 'node': node, 'lr': lr, 'port': port, 'cpu': -1}
+                  'ss': ss, 'batch_size': batch_size, 'node': node, 'lr': lr, 'port': port, 'cpu': cpu}
         template = jinja2.Template(buffer)
         with open(f'./yaml/{job_name}_{ss}.yaml', mode='a') as file:
             file.write(template.render(worker))
