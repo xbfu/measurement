@@ -242,7 +242,7 @@ def get_accuracy(ps_rref, data_dir, test_batch_size, job_name, target_loss):
 
             test_loss /= (len(val_data) - 1)
 
-            logger.info("Test Loss: {:5.2f} | Time: {:7.2f} seconds".format(test_loss, (t1 - init)))
+            logger.info("Test Loss: {:7.3f} | Time: {:7.2f} seconds".format(test_loss, (t1 - init)))
 
             if test_loss < target_loss:
                 ps_rref.rpc_sync().stop()
